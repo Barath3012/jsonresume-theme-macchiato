@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Builder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    .section { margin-bottom: 2rem; }
+    iframe {
+      width: 100%;
+      height: 90vh;
+      border: 1px solid #ccc;
+      background: white;
+    }
+    body {
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container-fluid py-4">
+    <div class="row">
+      <!-- Form Section -->
+      <div class="col-md-6">
+        <h2 class="mb-4">Resume Builder</h2>
+        <form id="resumeForm">
+          <!-- Basics Section -->
+          <div class="section">
+            <h4>Basics</h4>
+            <div class="mb-3"><label class="form-label">Name</label><input type="text" class="form-control" name="basics.name"></div>
+            <div class="mb-3"><label class="form-label">Name (Katakana)</label><input type="text" class="form-control" name="basics.name-katakana"></div>
+            <div class="mb-3">
+              <label class="form-label">Gender (性別)</label>
+              <select class="form-select" name="basics.gender-kanji">
+                <option value="男">男</option>
+                <option value="女">女</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" name="basics.email"></div>
+            <div class="mb-3"><label class="form-label">Phone</label><input type="text" class="form-control" name="basics.phone"></div>
+            <div class="mb-3"><label class="form-label">Summary</label><textarea class="form-control" name="basics.summary"></textarea></div>
+            <div class="mb-3"><label class="form-label">Picture</label><input type="file" class="form-control" name="picture" id="pictureInput" accept="image/*"></div>
+          </div>
+
+          <!-- Dynamic Sections -->
+          <div class="section" id="educationSection">
+            <h4>Education</h4>
+            <div id="educationContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('education')">Add Education</button>
+          </div>
+
+          <div class="section" id="projectsSection">
+            <h4>Projects</h4>
+            <div id="projectsContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('projects')">Add Project</button>
+          </div>
+
+          <div class="section" id="awardsSection">
+            <h4>Achievements</h4>
+            <div id="awardsContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('awards')">Add Achievement</button>
+          </div>
+
+          <div class="section" id="skillsSection">
+            <h4>Skills</h4>
+            <div id="skillsContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('skills')">Add Skill</button>
+          </div>
+
+          <div class="section" id="languagesSection">
+            <h4>Languages</h4>
+            <div id="languagesContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('languages')">Add Language</button>
+          </div>
+
+          <div class="section" id="interestsSection">
+            <h4>Areas of Interest</h4>
+            <div id="interestsContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('interests')">Add Area</button>
+          </div>
+
+          <div class="section" id="hobbiesSection">
+            <h4>Hobbies</h4>
+            <div id="hobbiesContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('hobbies')">Add Hobby</button>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+      </div>
+
+      <!-- Preview Section -->
+      <div class="col-md-6">
+        <h4 class="mb-3">Live Preview</h4>
+        <iframe id="previewFrame"></iframe>
+        <button id="downloadBtn" class="btn btn-primary mt-3">Download PDF</button>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const sectionFields = {
+    education: [
+      { label: 'Institution', key: 'institution' },
+      { label: 'Field of Study', key: 'area' },
+      { label: 'Degree/Program', key: 'studyType' },
+      { label: 'Start Date (YYYY-MM)', key: 'startDate' },
+      { label: 'End Date (YYYY-MM) (Leave blank for till Present)', key: 'endDate' }
+    ],
+    projects: [
+      { label: 'Project Name', key: 'name' },
+      { label: 'Description', key: 'description' },
+      { label: 'Start Date (YYYY-MM)', key: 'startDate' },
+      { label: 'End Date (YYYY-MM) (Leave blank for till Present)', key: 'endDate' }
+    ],
+    awards: [
+      { label: 'Award Title', key: 'title' },
+      { label: 'Awarded By', key: 'awarder' },
+      { label: 'About Me', key: 'summary' }
+    ],
+    skills: [
+      { label: 'Skill Name', key: 'name' }
+    ],
+    languages: [
+      { label: 'Language', key: 'language' },
+      { label: 'Fluency', key: 'fluency' }
+    ],
+    interests: [
+      { label: 'Interest', key: 'name' }
+    ],
+    hobbies: [
+      { label: 'Hobby Name', key: 'name' },
+      { label: 'Description', key: 'description' }
+    ]
+  };
+
+    function addSection(type) {
+      const container = document.getElementById(`${type}Container`);
+      const index = container.children.length;
+      const div = document.createElement('div');
+      div.classList.add('border', 'p-3', 'mb-3', 'bg-white');
+    
+      sectionFields[type].forEach(field => {
+        const label = document.createElement('label');
+        label.classList.add('form-label');
+        label.textContent = field.label;
+    
+        const input = document.createElement('input');
+        input.type = field.key.toLowerCase().includes('date') ? 'month' : 'text';
+        input.classList.add('form-control', 'mb-2');
+        input.name = `${type}.${index}.${field.key}`;
+    
+        div.appendChild(label);
+        div.appendChild(input);
+      });
+    
+      container.appendChild(div);
+    }
+    
+    async function getFormData() {
+      const form = document.getElementById('resumeForm');
+      const formData = new FormData(form);
+      const result = {};
+    
+      for (const [key, value] of formData.entries()) {
+        const parts = key.split('.');
+        if (parts.length === 2) {
+          result[parts[0]] ??= {};
+          result[parts[0]][parts[1]] = value;
+        } else if (parts.length === 3) {
+          const [section, idx, field] = parts;
+          result[section] ??= [];
+          result[section][idx] ??= {};
+          result[section][idx][field] = value;
+        }
+      }
+    
+      // Handle picture (if provided)
+      const pictureInput = document.getElementById('pictureInput');
+      if (pictureInput.files.length > 0) {
+        const file = pictureInput.files[0];
+        result.basics ??= {};
+        result.basics.picture = await toBase64(file);
+      }
+    
+      return result;
+    }
+    
+    // Helper function
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById('resumeForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+    
+      const result = await getFormData();
+    
+      try {
+        const res = await fetch('/preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(result)
+        });
+    
+        const html = await res.text();
+        const iframe = document.getElementById('previewFrame');
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+    
+        iframe.scrollIntoView({ behavior: 'smooth' });
+    
+      } catch (err) {
+        alert("Error generating preview.");
+        console.error(err);
+      }
+    });
+    
+    document.getElementById('downloadBtn').addEventListener('click', async () => {
+      const formData = await getFormData(); // 👈 call the shared function
+      const res = await fetch('/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+    
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resume.pdf';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+
+  </script>
+</body>
+</html>
