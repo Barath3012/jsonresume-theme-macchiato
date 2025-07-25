@@ -7,7 +7,8 @@
     "test": "jest",
     "prepublishOnly": "npm run pretty && npm run lint && npm run test",
     "pretty": "prettier --write --ignore-path='*lock.json' '{src/**/*.{js,ts,json},./*{js,ts,json}}' ",
-    "lint": "eslint *.js"
+    "lint": "eslint *.js",
+    "bypass-push": "HUSKY=0 git push"
   },
   "husky": {
     "hooks": {
