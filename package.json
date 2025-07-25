@@ -23,9 +23,12 @@
   "license": "MIT",
   "dependencies": {
     "address-format": "^0.0.3",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
     "handlebars": "^4.7.6",
     "handlebars-wax": "^6.1.0",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "puppeteer": "^2.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "~8.2.0",
@@ -38,7 +41,7 @@
     "jest-handlebars": "^1.0.1",
     "jest-image-snapshot": "^2.11.0",
     "prettier": "^1.18.2",
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^2.1.1"
   },
   "jest": {
     "transform": {

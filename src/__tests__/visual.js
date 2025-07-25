@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 const fs = require('fs');
 const path = require('path');

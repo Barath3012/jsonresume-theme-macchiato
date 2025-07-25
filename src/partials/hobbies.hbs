@@ -1,0 +1,13 @@
+{{#if resume.hobbies.length}}
+<div class="container hobbies-container">
+    {{> title value="Hobbies"}}
+
+    {{#each resume.hobbies}}
+        <section class="item">
+            {{> section-header name=this.name }}
+
+            
+        </section>
+    {{/each}}
+</div>
+{{/if}}
