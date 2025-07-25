@@ -95,6 +95,7 @@
         <h4 class="mb-3">Live Preview</h4>
         <iframe id="previewFrame"></iframe>
         <button id="downloadBtn" class="btn btn-primary mt-3">Download PDF</button>
+        <span id="loadingText" style="display:none; margin-left: 10px;">Downloading...</span>
 
       </div>
     </div>
@@ -226,6 +227,10 @@
     });
     
     document.getElementById('downloadBtn').addEventListener('click', async () => {
+      
+      const loadingText = document.getElementById('loadingText');
+      loadingText.style.display = 'inline';
+        
       const formData = await getFormData(); // 👈 call the shared function
       const res = await fetch('/generate-pdf', {
         method: 'POST',
@@ -240,6 +245,7 @@
       a.download = 'resume.pdf';
       a.click();
       window.URL.revokeObjectURL(url);
+      loadingText.style.display = 'none';
     });
 
   </script>

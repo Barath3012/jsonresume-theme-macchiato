@@ -6,6 +6,15 @@ const handlebars = require('handlebars');
 const handlebarsWax = require('handlebars-wax');
 const moment = require('moment');
 const puppeteer = require('puppeteer');
+const cloudinary = require('cloudinary').v2;
+const { Readable } = require('stream');
+require('dotenv').config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -54,16 +63,24 @@ app.post('/preview', (req, res) => {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+function bufferToStream(buffer) {
+  const readable = new Readable();
+  // eslint-disable-next-line no-underscore-dangle
+  readable._read = () => {};
+  readable.push(buffer);
+  readable.push(null);
+  return readable;
+}
+
 app.post('/generate-pdf', async (req, res) => {
   try {
-    console.log('Got a POST request');
-    const resumeJSON = req.body; // 👈 gets the JSON from the client
-    const html = render(resumeJSON); // your render() function already supports this
+    console.log('📨 Got a POST request to generate PDF');
+    const resumeJSON = req.body;
 
-    const browser = await puppeteer.launch({
-      headless: 'new', // or true if using puppeteer < 20
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    const html = render(resumeJSON); // Assuming you already have this
+
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
@@ -79,15 +96,40 @@ app.post('/generate-pdf', async (req, res) => {
 
     await browser.close();
 
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename=resume.pdf',
-      'Content-Length': pdfBuffer.length,
-    });
+    // Upload to Cloudinary
+    const publicId = `Resumes/${resumeJSON.basics.name}-${Date.now()}`;
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: 'raw', // PDFs are not images
+        public_id: publicId,
+        overwrite: true,
+      },
+      /* eslint-disable consistent-return */
+      (error, result) => {
+        if (error) {
+          // console.error('❌ Cloudinary upload failed:', error);
+          console.log(result);
+          return res.status(500).send('PDF generated but upload failed');
+        }
 
-    res.send(pdfBuffer);
+        // console.log('✅ Uploaded to Cloudinary:', result.secure_url);
+
+        // Send download link or serve the PDF directly:
+        res.set({
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename=resume.pdf',
+          'Content-Length': pdfBuffer.length,
+        });
+
+        res.send(pdfBuffer);
+        // Or instead of res.send(pdfBuffer), you can send JSON like:
+        // res.json({ cloudUrl: result.secure_url });
+      },
+    );
+
+    bufferToStream(pdfBuffer).pipe(uploadStream);
   } catch (err) {
-    console.error(err);
+    // console.error('❌ PDF generation failed:', err);
     res.status(500).send('Failed to generate PDF');
   }
 });
