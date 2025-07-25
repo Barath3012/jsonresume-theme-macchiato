@@ -60,7 +60,10 @@ app.post('/generate-pdf', async (req, res) => {
     const resumeJSON = req.body; // 👈 gets the JSON from the client
     const html = render(resumeJSON); // your render() function already supports this
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: 'new', // or true if using puppeteer < 20
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 

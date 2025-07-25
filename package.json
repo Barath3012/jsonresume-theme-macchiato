@@ -44,6 +44,9 @@
     "prettier": "^1.18.2",
     "puppeteer": "^2.1.1"
   },
+  "puppeteer": {
+    "skipDownload": false
+  },
   "jest": {
     "moduleNameMapper": {
       "^node:(.*)$": "<rootDir>/node_modules/$1"
