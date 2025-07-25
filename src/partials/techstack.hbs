@@ -1,0 +1,18 @@
+{{#if resume.techstack.length}}
+    <div class="skills-container">
+    <section class="container">
+      {{> title value="Tech Stack"}}
+        {{#each resume.techstack}}
+            
+                
+                {{#if name}}
+                    <div class="minimal flex-container">
+                        
+                          <h6 class="main-skill skill">{{name}}</h6>
+                        
+                    </div>
+                {{/if}}
+        {{/each}}
+      </section>
+    </div>
+{{/if}}

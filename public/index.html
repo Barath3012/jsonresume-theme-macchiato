@@ -55,17 +55,23 @@
             <div id="projectsContainer"></div>
             <button type="button" class="btn btn-secondary" onclick="addSection('projects')">Add Project</button>
           </div>
+          
+          <div class="section" id="techstackSection">
+            <h4>Tech Stack</h4>
+            <div id="techstackContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('techstack')">Add Tech Stack</button>
+          </div>
+          
+          <div class="section" id="skillsSection">
+            <h4>Skills</h4>
+            <div id="skillsContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('skills')">Add Skill</button>
+          </div>
 
           <div class="section" id="awardsSection">
             <h4>Achievements</h4>
             <div id="awardsContainer"></div>
             <button type="button" class="btn btn-secondary" onclick="addSection('awards')">Add Achievement</button>
-          </div>
-
-          <div class="section" id="skillsSection">
-            <h4>Skills</h4>
-            <div id="skillsContainer"></div>
-            <button type="button" class="btn btn-secondary" onclick="addSection('skills')">Add Skill</button>
           </div>
 
           <div class="section" id="languagesSection">
@@ -134,7 +140,11 @@
     hobbies: [
       { label: 'Hobby Name', key: 'name' },
       { label: 'Description', key: 'description' }
-    ]
+    ],
+    techstack: [
+      { label: 'Tech Stack', key: 'name' }
+    ],
+    
   };
 
     function addSection(type) {

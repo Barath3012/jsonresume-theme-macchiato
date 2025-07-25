@@ -97,7 +97,7 @@ app.post('/generate-pdf', async (req, res) => {
     await browser.close();
 
     // Upload to Cloudinary
-    const publicId = `Resumes/${resumeJSON.basics.name}-${Date.now()}`;
+    const publicId = `Resumes/${resumeJSON.basics.name}-${Date.now()}.pdf`;
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         resource_type: 'raw', // PDFs are not images
