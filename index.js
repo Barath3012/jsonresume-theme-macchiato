@@ -52,7 +52,7 @@ app.post('/preview', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'resume.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.post('/generate-pdf', async (req, res) => {
   try {
