@@ -22,6 +22,8 @@ const PORT = process.env.PORT || 3000;
 // Parse JSON body
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
 // Register Handlebars helpers
 handlebars.registerHelper({
