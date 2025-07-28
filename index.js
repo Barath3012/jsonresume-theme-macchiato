@@ -97,12 +97,14 @@ app.post('/generate-pdf', async (req, res) => {
     await browser.close();
 
     // Upload to Cloudinary
-    const publicId = `Resumes/${resumeJSON.basics.name}-${Date.now()}.pdf`;
+    const publicId = `${resumeJSON.basics.name}-${Date.now()}.pdf`;
+    const assertFolder = 'Resumes';
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         resource_type: 'raw', // PDFs are not images
         public_id: publicId,
         overwrite: true,
+        asset_folder: assertFolder,
       },
       /* eslint-disable consistent-return */
       (error, result) => {
