@@ -99,6 +99,8 @@ app.post('/generate-pdf', async (req, res) => {
     });
     await browser.close();
     console.timeEnd('puppeteer');
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.evaluateHandle('document.fonts.ready');
     // Upload to Cloudinary
     console.time('cloudinary');
     const name = resumeJSON.basics.name.trim().replace(/\s+/g, '_');
