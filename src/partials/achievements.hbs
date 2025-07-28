@@ -2,12 +2,12 @@
 <div class="container publications-container">
     {{> title value="Achievements and Certifications"}}
 
-    {{#each resume.publications}}
+    {{#each resume.awards}}
     <section class="item">
-        {{> section-header name=this.name}}
+        {{> section-header name=this.title}}
 
         {{#if publisher}}
-        <h5 class="awarder">{{publisher}}</h5>
+        <h5 class="awarder">{{awarder}}</h5>
         {{/if}}
 
         {{#if summary}}
