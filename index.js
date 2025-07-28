@@ -81,7 +81,8 @@ app.post('/generate-pdf', async (req, res) => {
     const html = render(resumeJSON); // Assuming you already have this
     console.time('puppeteer');
     const browser = await puppeteer.launch({
-      headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, // Use system Chromium
+      headless: true, // or true
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
