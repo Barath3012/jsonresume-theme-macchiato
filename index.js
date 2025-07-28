@@ -80,8 +80,11 @@ app.post('/generate-pdf', async (req, res) => {
     const resumeJSON = req.body;
 
     const html = render(resumeJSON); // Assuming you already have this
-
-    const browser = await puppeteer.launch();
+    console.time('puppeteer');
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
@@ -95,8 +98,9 @@ app.post('/generate-pdf', async (req, res) => {
       },
     });
     await browser.close();
-
+    console.timeEnd('puppeteer');
     // Upload to Cloudinary
+    console.time('cloudinary');
     const name = resumeJSON.basics.name.trim().replace(/\s+/g, '_');
     const publicId = `${name}-${Date.now()}`;
 
@@ -124,6 +128,7 @@ app.post('/generate-pdf', async (req, res) => {
           'Content-Disposition': 'attachment; filename=resume.pdf',
           'Content-Length': pdfBuffer.length,
         });
+        console.timeEnd('cloudinary');
 
         res.send(pdfBuffer);
         // Or instead of res.send(pdfBuffer), you can send JSON like:
