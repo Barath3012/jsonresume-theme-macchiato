@@ -35,33 +35,15 @@ handlebars.registerHelper({
 });
 
 function render(resume) {
-  const baseDir = path.join(__dirname, 'src');
-  const css = fs.readFileSync(`${baseDir}/style.css`, 'utf-8');
-  const resumeTemplate = fs.readFileSync(`${baseDir}/resume.hbs`, 'utf-8');
-
-  // Load font from public/fonts/ and convert to base64
-  const fontPath = path.join(__dirname, 'public', 'fonts', 'NotoSansJP-Regular.ttf');
-  const fontBuffer = fs.readFileSync(fontPath);
-  const fontBase64 = fontBuffer.toString('base64');
-
-  // Create @font-face CSS using embedded base64 font
-  const fontCSS = `
-@font-face {
-  font-family: 'Noto Sans JP';
-  src: url(data:font/truetype;charset=utf-8;base64,${fontBase64}) format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-body {
-  font-family: 'Noto Sans JP', sans-serif;
-}
-`;
+  const dir = path.join(__dirname, 'src');
+  const css = fs.readFileSync(`${dir}/style.css`, 'utf-8');
+  const resumeTemplate = fs.readFileSync(`${dir}/resume.hbs`, 'utf-8');
 
   const Handlebars = handlebarsWax(handlebars);
-  Handlebars.partials(`${baseDir}/partials/**/*.{hbs,js}`);
+  Handlebars.partials(`${dir}/partials/**/*.{hbs,js}`);
 
   return Handlebars.compile(resumeTemplate)({
-    style: `<style>${fontCSS + css}</style>`,
+    style: `<style>${css}</style>`,
     resume,
   });
 }
@@ -103,9 +85,10 @@ app.post('/generate-pdf', async (req, res) => {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    await page.evaluateHandle('document.fonts.ready');
+    console.log('waiting...');
 
+    // await page.goto(`data:text/html;charset=UTF-8,${html}`, { waitUntil: 'networkidle0' });
+    await page.setContent(html, { waitUntil: 'networkidle0' });
     const pdfBuffer = await page.pdf({
       format: 'A4',
       margin: {

@@ -4,6 +4,17 @@
 /*----- Dimensions and sizes -----*/
 /* Base */
 @font-face {
+  font-family: 'Noto Sans JP';
+  src: url(data:font/truetype;charset=utf-8;base64,${fontBase64}) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+@font-face {
   font-family: 'Josefin Sans';
   font-style: normal;
   font-weight: 300;
