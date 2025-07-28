@@ -87,6 +87,7 @@ app.post('/generate-pdf', async (req, res) => {
     });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.evaluateHandle('document.fonts.ready');
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
@@ -99,8 +100,6 @@ app.post('/generate-pdf', async (req, res) => {
     });
     await browser.close();
     console.timeEnd('puppeteer');
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    await page.evaluateHandle('document.fonts.ready');
     // Upload to Cloudinary
     console.log('Cloudinary Begins now.');
     console.time('cloudinary');
