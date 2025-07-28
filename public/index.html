@@ -24,6 +24,7 @@
       <!-- Form Section -->
       <div class="col-md-6">
         <h2 class="mb-4">Resume Builder</h2>
+        <h3 class="mb-4"> Note: You can leave a space blank if it doesn't apply to you. <br> Also, note that when you press download, a copy would be sent to ABK. So please finalize before you download.</h3>
         <form id="resumeForm">
           <!-- Basics Section -->
           <div class="section">
@@ -39,7 +40,7 @@
             </div>
             <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" name="basics.email"></div>
             <div class="mb-3"><label class="form-label">Phone</label><input type="text" class="form-control" name="basics.phone"></div>
-            <div class="mb-3"><label class="form-label">Summary</label><textarea class="form-control" name="basics.summary"></textarea></div>
+            <div class="mb-3"><label class="form-label">About me</label><textarea class="form-control" name="basics.summary"></textarea></div>
             <div class="mb-3"><label class="form-label">Picture</label><input type="file" class="form-control" name="picture" id="pictureInput" accept="image/*"></div>
           </div>
 
@@ -63,7 +64,7 @@
           </div>
           
           <div class="section" id="skillsSection">
-            <h4>Skills</h4>
+            <h4>Key Skills</h4>
             <div id="skillsContainer"></div>
             <button type="button" class="btn btn-secondary" onclick="addSection('skills')">Add Skill</button>
           </div>
@@ -114,10 +115,13 @@
       { label: 'Field of Study', key: 'area' },
       { label: 'Degree/Program', key: 'studyType' },
       { label: 'Start Date (YYYY-MM)', key: 'startDate' },
-      { label: 'End Date (YYYY-MM) (Leave blank for till Present)', key: 'endDate' }
+      { label: 'End Date (YYYY-MM) (Leave blank for till Present)', key: 'endDate' },
+      { label: 'GPA', key: 'gpa' }
     ],
     projects: [
       { label: 'Project Name', key: 'name' },
+      { label: 'Summary of the Project', key: 'summary' },
+      { label: 'Role in the Project', key: 'role' },
       { label: 'Description', key: 'description' },
       { label: 'Start Date (YYYY-MM)', key: 'startDate' },
       { label: 'End Date (YYYY-MM) (Leave blank for till Present)', key: 'endDate' }
@@ -167,7 +171,16 @@
         div.appendChild(input);
       });
     
-      container.appendChild(div);
+      const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.classList.add('btn', 'btn-danger', 'mt-2');
+        deleteBtn.textContent = 'Remove This Section';
+        deleteBtn.onclick = function () {
+          container.removeChild(div);
+        };
+      
+        div.appendChild(deleteBtn);
+        container.appendChild(div);
     }
     
     async function getFormData() {
