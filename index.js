@@ -95,11 +95,12 @@ app.post('/generate-pdf', async (req, res) => {
         right: '0in',
       },
     });
-
     await browser.close();
 
     // Upload to Cloudinary
-    const publicId = `${resumeJSON.basics.name}-${Date.now()}.pdf`;
+    const name = resumeJSON.basics.name.trim().replace(/\s+/g, '_');
+    const publicId = `${name}-${Date.now()}`;
+
     const assertFolder = 'Resumes';
     const uploadStream = cloudinary.uploader.upload_stream(
       {
@@ -111,7 +112,7 @@ app.post('/generate-pdf', async (req, res) => {
       /* eslint-disable consistent-return */
       (error, result) => {
         if (error) {
-          // console.error('❌ Cloudinary upload failed:', error);
+          console.error('❌ Cloudinary upload failed:', error);
           console.log(result);
           return res.status(500).send('PDF generated but upload failed');
         }
