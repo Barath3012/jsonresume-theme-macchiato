@@ -130,6 +130,15 @@
       "description": "Experimenting with Indian and Japanese recipes."
     }
   ],
+  "internship":[
+    {
+      "name":"ABCD",
+      "startDate":"",
+      "endDate":"",
+      "title":"",
+      "description":""
+    }
+  ],
   "projects": [
     {
       "name": "Miss Direction",

@@ -68,11 +68,17 @@
             <div id="skillsContainer"></div>
             <button type="button" class="btn btn-secondary" onclick="addSection('skills')">Add Skill</button>
           </div>
+          
+          <div class="section" id="internshipSection">
+            <h4>Internships</h4>
+            <div id="internshipContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="addSection('internship')">Add Internship</button>
+          </div>
 
           <div class="section" id="awardsSection">
-            <h4>Achievements</h4>
+            <h4>Achievements & Certifications</h4>
             <div id="awardsContainer"></div>
-            <button type="button" class="btn btn-secondary" onclick="addSection('awards')">Add Achievement</button>
+            <button type="button" class="btn btn-secondary" onclick="addSection('awards')">Add Achievement/Certifications</button>
           </div>
 
           <div class="section" id="languagesSection">
@@ -126,10 +132,19 @@
       { label: 'Start Date (YYYY-MM)', key: 'startDate' },
       { label: 'End Date (YYYY-MM) (Leave blank for till Present)', key: 'endDate' }
     ],
+    internship: [
+      { label: 'Company Name', key: 'name' },
+      { label: 'Start Date', key: 'startDate' },
+      { label: 'End date', key: 'endDate' },
+      { label: 'Project Title', key: 'title' },
+      { label: 'Project Description', key: 'summary' },
+      { label: 'Role', key: 'role' }
+    ],
+  
     awards: [
-      { label: 'Award Title', key: 'title' },
+      { label: 'Award/Certification Title', key: 'title' },
       { label: 'Awarded By', key: 'awarder' },
-      { label: 'About Me', key: 'summary' }
+      { label: 'Summary', key: 'summary' }
     ],
     skills: [
       { label: 'Skill Name', key: 'name' }

@@ -1,0 +1,27 @@
+{{#if resume.internship.length}}
+<div class="container project-container">
+    {{> title value="Internships"}}
+
+    {{#each resume.internship}}
+        <section class="item">
+            {{> section-header name=this.name}}
+            
+            {{#if title}}
+              <h3>{{title}}</h3>
+            {{/if}}
+            
+            {{#if role}}
+                <h5>{{role}}</h5>
+            {{/if}}
+
+            
+
+            {{#if summary}}
+            <p class="summary">{{summary}}</p>
+            {{/if}}
+
+            
+        </section>
+    {{/each}}
+</div>
+{{/if}}
