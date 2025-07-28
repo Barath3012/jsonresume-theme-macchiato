@@ -34,17 +34,34 @@ handlebars.registerHelper({
   eq: (a, b) => a === b,
 });
 
-// Rendering logic
 function render(resume) {
-  const dir = path.join(__dirname, 'src');
-  const css = fs.readFileSync(`${dir}/style.css`, 'utf-8');
-  const resumeTemplate = fs.readFileSync(`${dir}/resume.hbs`, 'utf-8');
+  const baseDir = path.join(__dirname, 'src');
+  const css = fs.readFileSync(`${baseDir}/style.css`, 'utf-8');
+  const resumeTemplate = fs.readFileSync(`${baseDir}/resume.hbs`, 'utf-8');
+
+  // Load font from public/fonts/ and convert to base64
+  const fontPath = path.join(__dirname, 'public', 'fonts', 'NotoSansJP-Regular.ttf');
+  const fontBuffer = fs.readFileSync(fontPath);
+  const fontBase64 = fontBuffer.toString('base64');
+
+  // Create @font-face CSS using embedded base64 font
+  const fontCSS = `
+@font-face {
+  font-family: 'Noto Sans JP';
+  src: url(data:font/truetype;charset=utf-8;base64,${fontBase64}) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+`;
 
   const Handlebars = handlebarsWax(handlebars);
-  Handlebars.partials(`${dir}/partials/**/*.{hbs,js}`);
+  Handlebars.partials(`${baseDir}/partials/**/*.{hbs,js}`);
 
   return Handlebars.compile(resumeTemplate)({
-    style: `<style>${css}</style>`,
+    style: `<style>${fontCSS + css}</style>`,
     resume,
   });
 }
