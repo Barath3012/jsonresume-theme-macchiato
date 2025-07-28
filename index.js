@@ -102,6 +102,7 @@ app.post('/generate-pdf', async (req, res) => {
     await page.setContent(html, { waitUntil: 'networkidle0' });
     await page.evaluateHandle('document.fonts.ready');
     // Upload to Cloudinary
+    console.log('Cloudinary Begins now.');
     console.time('cloudinary');
     const name = resumeJSON.basics.name.trim().replace(/\s+/g, '_');
     const publicId = `${name}-${Date.now()}`;
@@ -116,13 +117,15 @@ app.post('/generate-pdf', async (req, res) => {
       },
       /* eslint-disable consistent-return */
       (error, result) => {
+        console.log('Cloudinary Upload Began.');
         if (error) {
+          console.log('Cloudinary Error.');
           console.error('❌ Cloudinary upload failed:', error);
           console.log(result);
           return res.status(500).send('PDF generated but upload failed');
         }
 
-        // console.log('✅ Uploaded to Cloudinary:', result.secure_url);
+        console.log('✅ Uploaded to Cloudinary:', result.secure_url);
 
         // Send download link or serve the PDF directly:
         res.set({
