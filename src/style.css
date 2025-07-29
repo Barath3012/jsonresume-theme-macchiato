@@ -299,35 +299,6 @@ ul.two-column li {
 }
 
 @media print {
-  
-  
-  .page {
-      display: block; /* Ensure block layout in print */
-    }
-  
-    .page:after {
-      content: none; /* Prevent page :after ghost content */
-    }
-  
-    .left-column,
-    .right-column {
-      display: block;
-      float: none;
-      width: 100%;
-      margin: 0;
-    }
-  
-    .resume-content {
-      column-count: 2;
-      column-gap: 40px;
-    }
-  
-    .resume-content > * {
-      break-inside: avoid;
-      page-break-inside: avoid;
-      margin-bottom: 20px;
-    }
-    
   body {
     margin: 0;
   }
@@ -345,10 +316,34 @@ ul.two-column li {
     padding: 0 22px 0 34px;
   }
   
-  .section, .item {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
+  .resume-wrapper {
+      column-count: 2;
+      column-gap: 40px;
+      width: 100%;
+    }
+  
+    .left-column,
+    .right-column {
+      float: none;
+      width: auto;
+      display: block;
+    }
+  
+    .left-column > *, .right-column > * {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin-bottom: 12px;
+    }
+    
+    .left-column .section-left {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        page-break-before: auto;
+        break-before: auto;
+        margin-bottom: 12px;
+      }
+    
+  
 
   .container {
     page-break-inside: avoid;

@@ -87,7 +87,7 @@ app.post('/generate-pdf', async (req, res) => {
     });
     const page = await browser.newPage();
     console.log('waiting...');
-
+    await page.emulateMediaType('screen'); // Try using screen CSS
     // await page.goto(`data:text/html;charset=UTF-8,${html}`, { waitUntil: 'networkidle0' });
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const pdfBuffer = await page.pdf({

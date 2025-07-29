@@ -13,14 +13,13 @@
   <main id="resume" class="page">
     {{> resume-header}}
     <div class="resume-content">
-      <aside class="left-column">
-        {{> about }}
-        {{> techstack }}
-        {{> skills }}
-        {{> languages }}
-        {{> interests }}
-        
-      </aside>
+     <aside class="left-column">
+        <div class="section-left">{{> about }}</div>
+        <div class="section-left">{{> techstack }}</div>
+        <div class="section-left">{{> skills }}</div>
+        <div class="section-left">{{> languages }}</div>
+        <div class="section-left">{{> interests }}</div>
+    </aside>
       <div class="right-column">
         {{> summary}}
         {{> education }}
