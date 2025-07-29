@@ -95,7 +95,7 @@ app.post('/generate-pdf', async (req, res) => {
     // await page.goto(`data:text/html;charset=UTF-8,${html}`, { waitUntil: 'networkidle0' });
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const A4_RATIO = 1.4142;
-    const widthInPixels = 1000; // ⬅️ Increase this to give columns breathing room
+    const widthInPixels = 950; // ⬅️ Increase this to give columns breathing room
     const heightInPixels = Math.floor(widthInPixels * A4_RATIO);
     const pdfBuffer = await page.pdf({
       width: `${widthInPixels}px`,
