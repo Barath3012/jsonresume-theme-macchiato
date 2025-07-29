@@ -87,7 +87,11 @@ app.post('/generate-pdf', async (req, res) => {
     });
     const page = await browser.newPage();
     console.log('waiting...');
-    await page.emulateMediaType('screen'); // Try using screen CSS
+    await page.emulateMediaType('print'); // Try using screen CSS
+    await page.setViewport({
+      width: 1200,
+      height: 1600, // doesn't matter much, but prevents small default
+    });
     // await page.goto(`data:text/html;charset=UTF-8,${html}`, { waitUntil: 'networkidle0' });
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const pdfBuffer = await page.pdf({
@@ -99,6 +103,11 @@ app.post('/generate-pdf', async (req, res) => {
         right: '0in',
       },
     });
+    await page.evaluate(() => {
+      console.log('VIEWPORT WIDTH:', window.innerWidth);
+      console.log('LEFT COLUMN STYLE:', getComputedStyle(document.querySelector('.left-column')).cssText);
+    });
+
     await browser.close();
     console.timeEnd('puppeteer');
     // Upload to Cloudinary
